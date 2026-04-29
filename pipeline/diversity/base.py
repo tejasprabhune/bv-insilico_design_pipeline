@@ -158,10 +158,12 @@ class DiversityPipeline():
 				rows = []
 				with open(output_filepath) as file:
 					for line in file:
-						if line.startswith('TM-score') and 'Chain_1' in line:
+						# TMalign 2024.3.3+ (USalign) renamed "Chain_1" / "Chain_2"
+						# to "Structure_1" / "Structure_2" in its output. Accept both.
+						if line.startswith('TM-score') and ('Chain_1' in line or 'Structure_1' in line):
 							tm = float(line.split('(')[0].split('=')[-1].strip())
 							rows.append((domain_1, domain_2, tm))
-						if line.startswith('TM-score') and 'Chain_2' in line:
+						if line.startswith('TM-score') and ('Chain_2' in line or 'Structure_2' in line):
 							tm = float(line.split('(')[0].split('=')[-1].strip())
 							rows.append((domain_2, domain_1, tm))
 

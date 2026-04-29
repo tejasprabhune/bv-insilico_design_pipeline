@@ -126,7 +126,9 @@ class NoveltyPipeline():
 					# Parse
 					with open(output_filepath) as file:
 						for line in file:
-							if line.startswith('TM-score') and 'Chain_1' in line:
+							# TMalign 2024.3.3+ (USalign) renamed "Chain_1" to
+							# "Structure_1" in its output. Accept both wordings.
+							if line.startswith('TM-score') and ('Chain_1' in line or 'Structure_1' in line):
 								reference_names.append(reference_filepath.split('/')[-1].split('.')[0])
 								reference_tm_scores.append(float(line.split('(')[0].split('=')[-1].strip()))
 					os.remove(output_filepath)
