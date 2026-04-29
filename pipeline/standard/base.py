@@ -34,8 +34,8 @@ class Pipeline(ABC):
 		self,
 		inverse_fold_model,
 		fold_model,
-		tm_score_exec='packages/TMscore/TMscore',
-		tm_align_exec='packages/TMscore/TMalign'
+		tm_score_exec='TMscore',
+		tm_align_exec='TMalign'
 	):
 		"""
 		Args:

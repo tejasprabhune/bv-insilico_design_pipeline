@@ -25,7 +25,7 @@ class DiversityPipeline():
 		self,
 		postfix='',
 		max_ctm_threshold=0.6,
-		tm_align_exec='packages/TMscore/TMalign'
+		tm_align_exec='TMalign'
 	):
 		"""
 		Args:

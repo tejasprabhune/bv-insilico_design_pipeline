@@ -1,0 +1,10 @@
+[project]
+name = "insilico-design-pipeline"
+description = "In-silico protein design and evaluation pipeline (Genie 2 assessments)"
+
+# Pinned external binaries pulled by bv. The Python-library deps (ProteinMPNN,
+# ESMFold, OpenFold) still install via pip / git clone — they're imported, not
+# shelled out to.
+[[tools]]
+id = "tmalign"
+version = "^2024.3.3"
