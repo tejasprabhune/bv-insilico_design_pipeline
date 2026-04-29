@@ -1,7 +1,18 @@
 import os
 import math
+import multiprocessing
 from multiprocessing import Process
 from abc import ABC, abstractmethod
+
+# The pipelines pass local closures (e.g. `_compute_scores.<locals>.process`)
+# to multiprocessing. That requires the `fork` start method; on Python 3.12+
+# macOS defaults to `spawn`, which can't pickle closures. Force fork so the
+# pipelines run on macOS the same way they do on Linux.
+if multiprocessing.get_start_method(allow_none=True) is None:
+	try:
+		multiprocessing.set_start_method('fork')
+	except (RuntimeError, ValueError):
+		pass
 
 
 def run_parallel(num_processes, fn, tasks, params):
