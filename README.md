@@ -16,13 +16,23 @@ module load cuda11.8
 pip install torch==2.0.1+cu118 torchvision==0.15.2+cu118 --index-url https://download.pytorch.org/whl/cu118
 ```
 
+This repository uses [`bv`](https://github.com/mlberkeley/bv) (a uv-style tool manager for bioinformatics) to pull TMalign / TMscore as a pinned, content-addressed container instead of building them from source. Install bv first:
+
+```
+curl -sSfL https://github.com/mlberkeley/bv/releases/latest/download/bv-x86_64-unknown-linux-gnu -o /tmp/bv
+chmod +x /tmp/bv && sudo mv /tmp/bv /usr/local/bin/bv
+```
+
 The setup process consists of three parts:
 
-- Set up the pipeline package and additional packages (TMscore and TMalign) by running
+- Set up the pipeline package and pull pinned TMalign / TMscore by running
 
   ```
   bash scripts/setup/setup.sh
   ```
+
+  This installs the Python package and runs `bv sync`, which fetches the
+  TMalign image at the digest pinned in `bv.lock`. No `wget` / `g++` build.
 
 - Set up an inverse folding model and its dependencies by running
 
@@ -56,8 +66,10 @@ Our design package consists of three separate pipelines:
 Evaluate a set of generated structures by running
 
 ```
-python pipeline/standard/evaluate.py --version [VERSION] --rootdir [ROOTDIR]
+bv exec python pipeline/standard/evaluate.py --version [VERSION] --rootdir [ROOTDIR]
 ```
+
+`bv exec` puts `TMalign` and `TMscore` on `PATH` for the duration of the command — they're transparent shims that forward to the pinned container declared in `bv.lock`. The pipeline's `subprocess.call(...)` calls find them by name without changes. (You can also `bv shell` to drop into an interactive subshell with the same PATH set, e.g. for ad-hoc analysis.)
 
 Our standard pipeline currently supports evaluation of structures from unconditional generation (by setting version to `unconditional`) and motif scaffolding (`scaffold`). For both modes, we assume that the root directory contains a folder named `pdbs`, which contains the PDB files of generated structures to be evaluated. For motif scaffolding, we additionally assume that the root directory contains a folder named `motif_pdbs`, which contains the PDB files of the corresponding motif structures (with the same filename as the generated structure and residue index aligned). Note that for motif scaffolding, we also support evaluations of multiple problems at the same time. This means that the root directory could contain a list of subdirectories, each of which consists of a `pdbs` and `motif_pdbs` folder detailed above. When evaluating multiple motif scaffolding problems, our pipeline supports distribution of tasks across multiple GPUS by adding the following flags `--num_devices [NUM_GPUS] --num_processes [NUM_GPUS]`.
 

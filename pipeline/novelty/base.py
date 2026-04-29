@@ -25,7 +25,7 @@ class NoveltyPipeline():
 		self,
 		name,
 		datadir,
-		tm_align_exec='packages/TMscore/TMalign'
+		tm_align_exec='TMalign'
 	):
 		"""
 		Args:
