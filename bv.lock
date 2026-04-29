@@ -1,0 +1,24 @@
+version = 1
+
+[metadata]
+bv_version = "0.1.10"
+generated_at = "2026-04-29T17:42:01.916858Z"
+
+[tools.tmalign]
+tool_id = "tmalign"
+version = "2024.3.3"
+image_reference = "quay.io/biocontainers/tmalign:20240303--hd63eeec_0"
+image_digest = "sha256:c234ca5adebd43bb94fbc01d5bf9653bca3e017913aa767ae858bffc245ba86e"
+manifest_sha256 = "sha256:d4a0b2b630759797aef242d90c9ca8e791fb86fd2eb0075ca117ab9b2e033834"
+image_size_bytes = 22848879
+resolved_at = "2026-04-29T17:41:46.884084Z"
+binaries = [
+    "TMalign",
+    "TMscore",
+]
+
+[tools.tmalign.reference_data_pins]
+
+[binary_index]
+TMscore = "tmalign"
+TMalign = "tmalign"
